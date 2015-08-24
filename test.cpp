@@ -52,10 +52,27 @@ void testBindReturnsEmpty() {
   ASSERT(c == 2, "Only two of the bindings should be called");
 }
 
+void testValueOr() {
+  Maybe<std::string> res = MaybeMonad<std::string>("")
+    .bind([](std::string s) { return s + "foo"; })
+    .extract();
+
+  ASSERT(res.value_or("bar") == "foo", "Result should be foo");
+
+  Maybe<std::string> fail = MaybeMonad<std::string>("")
+    .bind([](const std::string &s) { return s + "foo"; })
+    .predicate([](const std::string &s) { return s.length() > 10; })
+    .extract();
+
+  ASSERT(!fail, "Result should be empty");
+  ASSERT(fail.value_or("bar") == "bar", "Empty result should be bar");
+}
+
 int main() {
   RUN_TEST(testMaybe);
   RUN_TEST(testIdentity);
   RUN_TEST(testFailedPred);
   RUN_TEST(testEmptyMonad);
   RUN_TEST(testBindReturnsEmpty);
+  RUN_TEST(testValueOr);
 }

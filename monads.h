@@ -49,6 +49,15 @@ class Maybe {
   }
 
   /**
+   * Returns the contained value if defined, otherwise returns the passed in default value
+   *
+   * @param {T} Default value to return if Maybe is empty.
+   */
+  T value_or(const T &default_value) {
+    return _rep ? *_rep : default_value;
+  }
+
+  /**
    * Check Maybe containers for equality, which will evaluate to true
    * if both are empty, or both are non-empty and their values are
    * also equal.
