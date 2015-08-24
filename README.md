@@ -19,9 +19,9 @@ std::string getAnswer(const std::string &input) {
   Maybe<std::string> maybe_val =
     MaybeMonad<std::string>(input)
       .bind([&len](const std::string &str) { len = str.length(); return str; })
-      .predicate([](const std::string &str) { str.length() > 12; })
-      .bind([](const std::string &str) { str += "\nYour Answer is: "; })
-      .bind([](const std::string &str) { str += "42"; })
+      .predicate([](const std::string &str) { return str.length() > 12; })
+      .bind([](const std::string &str) { return str + "\nYour Answer is: "; })
+      .bind([](const std::string &str) { return str + "42"; })
       .extract();
   return maybe_val.value_or("There is No Answer");
 }
